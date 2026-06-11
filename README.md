@@ -5,8 +5,8 @@ A complete, professional, secure, and responsive Public Grievance Portal where c
 ---
 
 ## 🌐 Live Website Links
-* **Citizen Portal (Live)**: [https://public-grievance-system-riuf.onrender.com](https://public-grievance-system-riuf.onrender.com)
-* **Admin Portal (Live)**: [https://public-grievance-system-riuf.onrender.com/admin.html](https://public-grievance-system-riuf.onrender.com/admin.html)
+* **Citizen Portal (Live)**: [https://karrishanmukha087-hash.github.io/public-grievance-system](https://karrishanmukha087-hash.github.io/public-grievance-system)
+* **Admin Portal (Live)**: [https://karrishanmukha087-hash.github.io/public-grievance-system/admin.html](https://karrishanmukha087-hash.github.io/public-grievance-system/admin.html)
 
 ### 🔑 Default Credentials
 * **Admin Username/Email**: `admin` or `admin@grievanceportal.gov`
@@ -35,14 +35,13 @@ A complete, professional, secure, and responsive Public Grievance Portal where c
 
 ---
 
-## ⚙️ How to Configure Permanent Data Persistence
-This project runs using an SQLite database fallback on Render's free tier. Since free instances wipe local files when sleeping, follow these steps to connect a free persistent MySQL database:
+## ⚙️ How it Works on GitHub Pages
+This website is deployed directly to **GitHub Pages**. Since GitHub Pages only hosts static content, a mock API layer (`public/js/mockApi.js`) intercepts all backend requests and handles database storage, session management, and notifications fully in your browser via `localStorage`.
 
-1. Sign up on [Clever Cloud](https://www.clever-cloud.com/).
-2. Create a free **MySQL Add-on** (Shared/Dev plan).
-3. In your **Render Dashboard**, go to **Environment** settings and add:
-   * `DB_HOST` = *(Your Clever Cloud Host)*
-   * `DB_USER` = *(Your Clever Cloud User)*
-   * `DB_PASSWORD` = *(Your Clever Cloud Password)*
-   * `DB_NAME` = *(Your Clever Cloud Database Name)*
-4. Save Changes to redeploy with persistent cloud storage!
+* **All features work live**: You can register users, submit grievances, track timelines, change priorities, and compile reports.
+* **Persistent locally**: All changes you make (lodged complaints, user profiles, status changes) are saved inside your browser's `localStorage` and will persist across refreshes.
+
+To run with a real backend and a SQL database locally:
+1. Clone the repository and run `npm install`.
+2. Start the local server using `npm start` or `node server.js`.
+3. Open `http://localhost:3000` in your browser.

@@ -34,25 +34,27 @@ const payload = JSON.stringify({
   repo: repoUrl,
   branch: 'main',
   autoDeploy: 'yes',
+  envVars: [
+    {
+      key: 'DB_TYPE',
+      value: 'sqlite'
+    },
+    {
+      key: 'JWT_SECRET',
+      value: 'CitizenGrievanceSecuredTokenKey2026!@#'
+    },
+    {
+      key: 'PORT',
+      value: '10000'
+    }
+  ],
   serviceDetails: {
     env: 'node',
-    buildCommand: 'npm install',
-    startCommand: 'node server.js',
     plan: 'free',
-    envVars: [
-      {
-        key: 'DB_TYPE',
-        value: 'sqlite'
-      },
-      {
-        key: 'JWT_SECRET',
-        value: 'CitizenGrievanceSecuredTokenKey2026!@#'
-      },
-      {
-        key: 'PORT',
-        value: '10000'
-      }
-    ]
+    envSpecificDetails: {
+      buildCommand: 'npm install',
+      startCommand: 'node server.js'
+    }
   }
 });
 
