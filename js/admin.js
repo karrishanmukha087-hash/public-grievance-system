@@ -27,25 +27,70 @@ document.addEventListener('DOMContentLoaded', () => {
   let trendChartInstance = null;
   let categoryChartInstance = null;
 
+  // --- GLOBAL LOADER HELPERS ---
+  let activeRequestCount = 0;
+
+  function initGlobalLoader() {
+    if (!document.getElementById('global-loader')) {
+      const loader = document.createElement('div');
+      loader.id = 'global-loader';
+      loader.className = 'global-loader';
+      document.body.appendChild(loader);
+    }
+    if (!document.getElementById('global-spinner')) {
+      const spinnerOverlay = document.createElement('div');
+      spinnerOverlay.id = 'global-spinner';
+      spinnerOverlay.className = 'global-spinner-overlay';
+      
+      const spinner = document.createElement('div');
+      spinner.className = 'premium-spinner';
+      spinnerOverlay.appendChild(spinner);
+      
+      document.body.appendChild(spinnerOverlay);
+    }
+  }
+
+  function showLoader() {
+    initGlobalLoader();
+    activeRequestCount++;
+    document.getElementById('global-loader').classList.add('active');
+    document.getElementById('global-spinner').classList.add('active');
+  }
+
+  function hideLoader() {
+    activeRequestCount = Math.max(0, activeRequestCount - 1);
+    if (activeRequestCount === 0) {
+      const loader = document.getElementById('global-loader');
+      const spinner = document.getElementById('global-spinner');
+      if (loader) loader.classList.remove('active');
+      if (spinner) spinner.classList.remove('active');
+    }
+  }
+
   // --- API FETCH HELPER ---
   async function apiFetch(url, options = {}) {
-    const headers = options.headers || {};
-    if (adminToken) {
-      headers['Authorization'] = `Bearer ${adminToken}`;
-    }
-    
-    if (options.body && !(options.body instanceof FormData) && typeof options.body === 'object') {
-      headers['Content-Type'] = 'application/json';
-      options.body = JSON.stringify(options.body);
-    }
+    showLoader();
+    try {
+      const headers = options.headers || {};
+      if (adminToken) {
+        headers['Authorization'] = `Bearer ${adminToken}`;
+      }
+      
+      if (options.body && !(options.body instanceof FormData) && typeof options.body === 'object') {
+        headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(options.body);
+      }
 
-    const response = await fetch(url, { ...options, headers });
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Something went wrong.');
+      const response = await fetch(url, { ...options, headers });
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Something went wrong.');
+      }
+      return data;
+    } finally {
+      hideLoader();
     }
-    return data;
   }
 
   // --- ROUTING / VIEW CONTROLLER ---
