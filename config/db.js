@@ -52,13 +52,23 @@ async function initDB() {
         port: process.env.DB_PORT || 3306,
         user: process.env.DB_USER || 'root',
         password: process.env.DB_PASSWORD || '',
+        ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined
       };
       
-      const connection = await mysql.createConnection(dbConfig);
       const dbName = process.env.DB_NAME || 'citizen_grievance_db';
       
-      await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\``);
-      await connection.end();
+      try {
+        const connection = await mysql.createConnection({ ...dbConfig, database: dbName });
+        await connection.end();
+      } catch (err) {
+        if (err.code === 'ER_BAD_DB_ERROR') {
+          const tempConn = await mysql.createConnection(dbConfig);
+          await tempConn.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\``);
+          await tempConn.end();
+        } else {
+          throw err;
+        }
+      }
 
       pool = mysql.createPool({
         ...dbConfig,
