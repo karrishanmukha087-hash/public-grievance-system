@@ -5,9 +5,7 @@ require('dotenv').config();
 // Determine database type
 // If process.env.DB_TYPE is 'sqlite' or if we default to SQLite on Render when DB credentials are empty
 const useSqlite = process.env.DB_TYPE === 'sqlite' || 
-                  (!process.env.DB_USER && !process.env.DB_HOST) || 
-                  (process.env.DB_HOST === 'localhost' && !process.env.DB_PASSWORD && process.env.RENDER === 'true') ||
-                  process.env.RENDER === 'true'; // Force SQLite on Render to avoid MySQL database dependency
+                  (!process.env.DB_USER && !process.env.DB_HOST);
 
 let pool;
 let sqliteDb;
