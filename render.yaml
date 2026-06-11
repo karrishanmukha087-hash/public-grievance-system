@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: public-grievance-system
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: DB_TYPE
+        value: sqlite
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        value: RenderCentralGrievancePortalTokenKey2026!@#
