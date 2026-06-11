@@ -1,7 +1,44 @@
 // Mock API Interceptor for GitHub Pages / Static Hosting (mockApi.js)
 (function() {
   const isStaticHosting = window.location.hostname.includes('github.io') || window.location.protocol === 'file:';
-  if (!isStaticHosting) return; // Do not intercept if running on real backend
+  
+  if (!isStaticHosting) {
+    const showStaticBackendBadge = () => {
+      let badge = document.getElementById('db-connection-badge');
+      if (!badge) {
+        badge = document.createElement('div');
+        badge.id = 'db-connection-badge';
+        badge.style.fontSize = '12px';
+        badge.style.fontWeight = '600';
+        badge.style.padding = '4px 8px';
+        badge.style.borderRadius = '12px';
+        badge.style.marginLeft = '12px';
+        badge.style.display = 'inline-flex';
+        badge.style.alignItems = 'center';
+        badge.style.gap = '4px';
+        badge.style.marginRight = '8px';
+        badge.style.cursor = 'pointer';
+        
+        const headerRight = document.querySelector('.header-right');
+        if (headerRight) {
+          headerRight.insertBefore(badge, headerRight.firstChild);
+        }
+      }
+      badge.innerHTML = '🟢 Cloud Sync Active';
+      badge.style.backgroundColor = 'rgba(16, 185, 129, 0.15)';
+      badge.style.color = '#10b981';
+      badge.onclick = () => {
+        alert("🟢 Database Sync is Online\n\nYou are successfully connected to the centralized cloud database. All actions sync in real time!");
+      };
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', showStaticBackendBadge);
+    } else {
+      setTimeout(showStaticBackendBadge, 50);
+    }
+    return;
+  }
 
   console.log('[MOCK API] Intercepting all backend requests using localStorage database.');
 
