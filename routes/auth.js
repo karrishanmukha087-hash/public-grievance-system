@@ -105,7 +105,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(
       { id: citizen.id, name: citizen.name, email: citizen.email, role: 'citizen' },
       JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: '365d' }
     );
 
     res.json({
@@ -160,7 +160,7 @@ router.post('/admin-login', async (req, res) => {
     const token = jwt.sign(
       { id: admin.id, name: admin.name, email: admin.email, role: admin.role, username: admin.username },
       JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: '365d' }
     );
 
     res.json({
